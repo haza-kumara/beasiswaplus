@@ -1,0 +1,77 @@
+.shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+.pageContent {
+  animation: fadeIn 0.2s var(--ease-out);
+}
+
+/* Desktop brand – hidden on mobile */
+.desktopBrand {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    flex-direction: row;
+  }
+
+  .main {
+    margin-left: var(--sidebar-width);
+    max-width: calc(100% - var(--sidebar-width));
+  }
+
+  .desktopBrand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 60px;
+    padding: 0 var(--space-4);
+    z-index: 110;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+  }
+
+  .brandLogo {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brandText {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brandName {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.1;
+  }
+
+  .brandSub {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+}

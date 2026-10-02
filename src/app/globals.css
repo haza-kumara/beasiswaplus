@@ -1,0 +1,346 @@
+/* ============================================
+   BeasiswaPlus Design System
+   Pastel Blue Education Theme + Dark Mode
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Light Theme (Default) ─── */
+:root {
+  --blue-50: #f0f7ff;
+  --blue-100: #dbeeff;
+  --blue-200: #bfdfff;
+  --blue-300: #93ccff;
+  --blue-400: #60b0ff;
+  --blue-500: #3b93fb;
+  --blue-600: #2574f0;
+  --blue-700: #1d5edd;
+  --blue-800: #1e4db3;
+  --blue-900: #1e438d;
+
+  --lavender-50: #f5f3ff;
+  --lavender-100: #ede9fe;
+  --lavender-200: #ddd6fe;
+  --lavender-300: #c4b5fd;
+  --lavender-400: #a78bfa;
+
+  --peach-50: #fff7f5;
+  --peach-100: #ffede8;
+  --peach-200: #ffd5cc;
+  --peach-300: #ffb3a3;
+  --peach-400: #ff8f73;
+  --peach-500: #f97054;
+
+  --mint-50: #f0fdf4;
+  --mint-100: #dcfce7;
+  --mint-200: #bbf7d0;
+  --mint-300: #86efac;
+  --mint-400: #4ade80;
+  --mint-500: #22c55e;
+
+  --rose-50: #fff1f2;
+  --rose-100: #ffe4e6;
+  --rose-200: #fecdd3;
+  --rose-300: #fda4af;
+  --rose-400: #fb7185;
+  --rose-500: #f43f5e;
+
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-200: #fde68a;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  /* Semantic Light */
+  --bg-primary: #f5f9ff;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-nav: rgba(255, 255, 255, 0.88);
+  --bg-input: #ffffff;
+  --bg-hover: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #ffffff;
+  --border-default: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(30, 67, 141, 0.04);
+  --shadow-md: 0 4px 12px rgba(30, 67, 141, 0.06);
+  --shadow-lg: 0 8px 24px rgba(30, 67, 141, 0.08);
+  --shadow-xl: 0 16px 40px rgba(30, 67, 141, 0.10);
+  --shadow-glow: 0 0 20px rgba(59, 147, 251, 0.15);
+  --shadow-card: 0 2px 8px rgba(30, 67, 141, 0.05), 0 0 0 1px rgba(30, 67, 141, 0.03);
+
+  /* Toast */
+  --toast-success: #16a34a;
+  --toast-error: #dc2626;
+  --toast-warning: #d97706;
+  --toast-info: #2563eb;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Typography */
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.3125rem;
+  --text-2xl: 1.5625rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+
+  /* Layout */
+  --header-height: 56px;
+  --bottom-nav-height: 68px;
+  --sidebar-width: 280px;
+  --max-content-width: 1200px;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ─── Dark Theme ─── */
+[data-theme="dark"] {
+  --blue-50: #0c1929;
+  --blue-100: #122240;
+  --blue-200: #1a3460;
+  --blue-300: #234a85;
+  --blue-400: #3672b8;
+  --blue-500: #4a90e2;
+  --blue-600: #5da3f5;
+  --blue-700: #7bb8ff;
+  --blue-800: #a4d0ff;
+  --blue-900: #d0e8ff;
+
+  --lavender-50: #110f20;
+  --lavender-100: #1a1730;
+  --lavender-200: #2a2548;
+  --lavender-300: #4a3f80;
+  --lavender-400: #7c6cc0;
+
+  --mint-50: #071a0e;
+  --mint-100: #0d2818;
+  --mint-200: #16402a;
+  --mint-300: #22663f;
+  --mint-400: #34a85a;
+  --mint-500: #3dd672;
+
+  --rose-50: #1c0a0c;
+  --rose-100: #2c1215;
+  --rose-200: #451a20;
+  --rose-300: #702a34;
+  --rose-400: #d44054;
+  --rose-500: #f25672;
+
+  --amber-50: #1a1408;
+  --amber-100: #2a200d;
+  --amber-200: #443615;
+  --amber-300: #6b5520;
+  --amber-400: #d4a520;
+
+  --gray-50: #0f1218;
+  --gray-100: #151a24;
+  --gray-200: #1e2636;
+  --gray-300: #2c3648;
+  --gray-400: #4a5872;
+  --gray-500: #6b7a95;
+  --gray-600: #8b9ab5;
+  --gray-700: #b0bdd0;
+  --gray-800: #d0dae8;
+  --gray-900: #e8eef5;
+
+  --bg-primary: #0b0f18;
+  --bg-secondary: #111827;
+  --bg-card: #151c2c;
+  --bg-elevated: #1a2238;
+  --bg-nav: rgba(17, 24, 39, 0.92);
+  --bg-input: #1a2238;
+  --bg-hover: #1e2a40;
+  --text-primary: #e8eef5;
+  --text-secondary: #8b9ab5;
+  --text-tertiary: #4a5872;
+  --text-inverse: #0f172a;
+  --border-default: #1e2a40;
+  --border-light: #161e30;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 20px rgba(74, 144, 226, 0.2);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.03);
+
+  --toast-success: #16a34a;
+  --toast-error: #dc2626;
+  --toast-warning: #d97706;
+  --toast-info: #2563eb;
+}
+
+/* ─── Global ─── */
+html {
+  font-family: var(--font-family);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  transition: background-color var(--duration-slow) var(--ease-out),
+              color var(--duration-slow) var(--ease-out);
+}
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+img { max-width: 100%; display: block; }
+ul, ol { list-style: none; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+/* ─── Animations ─── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.stagger-children > * {
+  animation: fadeInUp 0.4s var(--ease-out) backwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
