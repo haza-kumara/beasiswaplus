@@ -9,6 +9,9 @@
 -- 1. ENUM: status aplikasi beasiswa
 -- ============================================================
 CREATE TYPE public.application_status_enum AS ENUM (
+  'interested',
+  'preparing',
+  'ready',
   'submitted',
   'under_review',
   'accepted',
@@ -115,7 +118,7 @@ CREATE TABLE public.scholarship_applications (
   id             UUID                         PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id        UUID                         NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   scholarship_id UUID                         NOT NULL REFERENCES public.scholarships(id) ON DELETE CASCADE,
-  status         public.application_status_enum NOT NULL DEFAULT 'submitted',
+  status         public.application_status_enum NOT NULL DEFAULT 'interested',
   notes          TEXT,
   submitted_at   TIMESTAMPTZ,
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now()),

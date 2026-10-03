@@ -52,8 +52,11 @@ FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 -- ============================================================
 -- 4. BARU: scholarship_requirements
---    Tabel syarat matching engine yang BELUM ADA
+--    Tabel sudah dibuat di 000000, hanya tambah policy jika belum ada
 -- ============================================================
+-- Tabel sudah ada dari migration 000000, skip CREATE TABLE
+-- Hanya pastikan policy tidak duplikat
+DROP POLICY IF EXISTS "Authenticated users can view requirements" ON public.scholarship_requirements;
 CREATE TABLE IF NOT EXISTS public.scholarship_requirements (
   id              UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
   scholarship_id  UUID        NOT NULL REFERENCES public.scholarships(id) ON DELETE CASCADE,
@@ -84,23 +87,11 @@ USING (true);
 
 -- ============================================================
 -- 5. FIX: scholarship_applications
---    - Tambah enum values: interested, preparing, ready
 --    - Tambah UPDATE policy (user bisa update status aplikasi sendiri)
 --    - Tambah kolom updated_at + trigger
 --    - Tambah kolom submitted_at
 -- ============================================================
-
--- Tambah nilai enum baru untuk application_status_enum
-ALTER TYPE public.application_status_enum
-  ADD VALUE IF NOT EXISTS 'interested' BEFORE 'submitted';
-ALTER TYPE public.application_status_enum
-  ADD VALUE IF NOT EXISTS 'preparing'  BEFORE 'submitted';
-ALTER TYPE public.application_status_enum
-  ADD VALUE IF NOT EXISTS 'ready'      BEFORE 'submitted';
-
--- Ubah default status ke 'interested' sesuai panduan alur
-ALTER TABLE public.scholarship_applications
-  ALTER COLUMN status SET DEFAULT 'interested'::public.application_status_enum;
+-- NOTE: enum values (interested, preparing, ready) sudah ada di migration 000000
 
 -- Tambah kolom submitted_at dan updated_at
 ALTER TABLE public.scholarship_applications
