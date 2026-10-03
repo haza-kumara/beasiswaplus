@@ -4,8 +4,10 @@ import { MatchCard } from "@/components/match-card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { unstable_noStore } from "next/cache";
 
 export default async function MatchingPage() {
+  unstable_noStore();
   const supabase = await createClient();
   const {
     data: { user },
