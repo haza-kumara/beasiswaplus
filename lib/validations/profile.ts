@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const profileSchema = z.object({
   full_name: z.string().min(2, "Nama lengkap minimal 2 karakter"),
