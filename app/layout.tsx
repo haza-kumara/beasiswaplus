@@ -1,0 +1,34 @@
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+import { Providers } from "@/components/ui/Providers";
+
+export const metadata: Metadata = {
+  title: "BeasiswaPlus — Akses Beasiswa untuk Semua",
+  description:
+    "Platform beasiswa inklusif berbasis kebutuhan. Temukan beasiswa yang tepat, ajukan bantuan darurat, dan kelola dokumen aplikasi dengan mudah.",
+  keywords: [
+    "beasiswa",
+    "mahasiswa",
+    "bantuan pendidikan",
+    "beasiswa inklusif",
+    "bantuan darurat",
+  ],
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+  themeColor: "#f5f9ff",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="id">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
