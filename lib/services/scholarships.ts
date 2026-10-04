@@ -51,7 +51,18 @@ export async function updateScholarship(id: string, input: unknown) {
 
 export async function deleteScholarship(id: string) {
   const { data, error } = await repo.deleteScholarshipRow(id)
-  if (error) throw new ServiceError(400, error.message)
+
+  if (error) {
+    // 23503 = foreign key violation: beasiswa masih dipakai tabel applications
+    if (error.code === "23503") {
+      throw new ServiceError(
+        409,
+        "Beasiswa sudah memiliki pendaftar. Nonaktifkan saja (is_active = false).",
+      )
+    }
+    throw new ServiceError(400, error.message)
+  }
+
   if (!data) throw new ServiceError(404, "Beasiswa tidak ditemukan atau bukan admin")
   return { id: data.id }
 }
