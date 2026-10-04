@@ -1,32 +1,17 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import Link from "next/link"
+import { buttonClass } from "@/components/ui/action-button"
 
-export default function Page() {
+export default function SignUpSuccessPage() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">
-                Thank you for signing up!
-              </CardTitle>
-              <CardDescription>Check your email to confirm</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                You&apos;ve successfully signed up. Please check your email to
-                confirm your account before signing in.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+    <div className="space-y-4">
+      <h1 className="text-2xl font-semibold tracking-tight">Cek emailmu</h1>
+      <p className="text-sm text-[#5B6679]">
+        Kami mengirim link konfirmasi ke emailmu. Klik link itu untuk mengaktifkan akun, lalu isi profilmu.
+      </p>
+      <p className="text-xs text-[#5B6679]">
+        Belum ada email? Cek folder spam, atau kembali ke halaman masuk lalu minta kirim ulang.
+      </p>
+      <Link href="/auth/login" className={buttonClass("secondary", "w-full")}>Ke halaman masuk</Link>
     </div>
-  );
+  )
 }

@@ -1,46 +1,104 @@
-import { AuthButton } from "@/components/auth-button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server"
+import { ActionLink } from "@/components/ui/action-button"
+import { FontScope } from "@/components/shell/font-scope"
+import { DeadlineRail } from "@/components/dashboard/deadline-rail"
+import { ThemeSwitcher } from "@/components/theme-switcher"
+export const instant = false;
 
-export default function Home() {
+const features = [
+  {
+    title: "Cocok dengan kondisimu",
+    text: "Isi profil sekali. Beasiswa diurutkan dari yang paling sesuai, dengan alasan yang bisa kamu baca.",
+  },
+  {
+    title: "Tahu kapan harus bergerak",
+    text: "Garis waktu menunjukkan beasiswa mana yang paling dekat batas waktunya.",
+  },
+  {
+    title: "Berkas di satu tempat",
+    text: "Simpan KTM, KK, dan SKTM. Kamu langsung tahu dokumen apa yang masih kurang.",
+  },
+]
+
+function sampleDeadline(days: number) {
+  return new Date(Date.now() + days * 86_400_000).toISOString()
+}
+
+export default async function Home() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  const sample = [
+    { id: "a", title: "Contoh beasiswa A", score: 94, deadline: sampleDeadline(4) },
+    { id: "b", title: "Contoh beasiswa B", score: 87, deadline: sampleDeadline(11) },
+    { id: "c", title: "Contoh beasiswa C", score: 76, deadline: sampleDeadline(19) },
+    { id: "d", title: "Contoh beasiswa D", score: 81, deadline: sampleDeadline(26) },
+  ]
+
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <Link href="/" className="font-semibold">
-              BeasiswaPlus
-            </Link>
-            <Suspense>
-              <AuthButton />
-            </Suspense>
+    <FontScope className="min-h-screen bg-[#F4F5F7] dark:bg-[#0d161f] text-[15px] leading-relaxed text-[#0F1A2E] dark:text-[#e6eef5] transition-colors duration-300">
+      <header className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+        <span className="text-lg font-semibold tracking-tight text-[#0F1A2E] dark:text-white">
+          Beasiswa<span className="text-[#2338D1] dark:text-teal-400">Plus</span>
+        </span>
+        <nav className="flex items-center gap-4">
+          <ThemeSwitcher />
+          
+          <div className="flex items-center gap-1">
+            {user ? (
+              <ActionLink href="/dashboard">Buka dashboard</ActionLink>
+            ) : (
+              <>
+                <ActionLink href="/auth/login" variant="ghost">Masuk</ActionLink>
+                <ActionLink href="/auth/sign-up">Daftar</ActionLink>
+              </>
+            )}
           </div>
         </nav>
+      </header>
 
-        <div className="flex-1 flex flex-col items-center justify-center gap-8 max-w-2xl p-5 text-center">
-          <h1 className="text-4xl font-bold">
-            Temukan Beasiswa yang Tepat Untukmu
+      <main className="mx-auto max-w-5xl px-4">
+        <section className="py-16 md:py-24">
+          <h1 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl text-[#0F1A2E] dark:text-white">
+            Temukan beasiswa yang benar-benar bisa kamu dapatkan, dan kapan harus mendaftar.
           </h1>
-          <p className="text-muted-foreground text-lg">
-            BeasiswaPlus mencocokkan profilmu dengan beasiswa yang paling sesuai
-            secara otomatis — berdasarkan IPK, penghasilan, dan latar belakangmu.
+          <p className="mt-6 max-w-xl text-lg text-[#5B6679] dark:text-gray-400">
+            BeasiswaPlus mencocokkan profil mahasiswa dengan syarat tiap beasiswa, lalu menjelaskan alasannya.
           </p>
-          <div className="flex gap-4">
-            <Button asChild size="lg">
-              <Link href="/matching">Lihat Beasiswa Cocok</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/profile">Lengkapi Profil</Link>
-            </Button>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <ActionLink href={user ? "/dashboard" : "/auth/sign-up"} className="px-6 py-3 border border-transparent dark:border-teal-800">
+              {user ? "Lihat beasiswa untukku" : "Mulai cari beasiswa"}
+            </ActionLink>
+            <ActionLink href="/scholarships" variant="secondary" className="px-6 py-3 border border-[#DCE1EA] dark:border-[#243649] bg-white dark:bg-[#142130] text-[#0F1A2E] dark:text-gray-300">
+              Lihat semua beasiswa
+            </ActionLink>
           </div>
-        </div>
 
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <ThemeSwitcher />
-        </footer>
-      </div>
-    </main>
-  );
+          <div className="mt-16 border-t border-[#DCE1EA] dark:border-[#243649] pt-6">
+            <p className="text-sm text-[#5B6679] dark:text-gray-500">Contoh tampilan garis waktu di dashboard</p>
+            <div className="mt-2">
+              <DeadlineRail items={sample} interactive={false} />
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-[#DCE1EA] dark:border-[#243649] py-14">
+          <div className="grid gap-10 md:grid-cols-3">
+            {features.map((f) => (
+              <div key={f.title}>
+                <h2 className="text-lg font-semibold text-[#0F1A2E] dark:text-white">{f.title}</h2>
+                <p className="mt-2 text-[#5B6679] dark:text-gray-400">{f.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-[#DCE1EA] dark:border-[#243649] py-8 text-center text-sm text-[#5B6679] dark:text-gray-500">
+        BeasiswaPlus
+      </footer>
+    </FontScope>
+  )
 }

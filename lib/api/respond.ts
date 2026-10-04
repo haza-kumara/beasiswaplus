@@ -1,10 +1,7 @@
-import { NextResponse } from "next/server"
-import { ZodError } from "zod"
-import { ServiceError } from "@/lib/services/scholarships"
+import { NextResponse } from "next/server";
 
-export function handleError(e: unknown) {
-  if (e instanceof ZodError) return NextResponse.json({ error: e.flatten() }, { status: 422 })
-  if (e instanceof ServiceError) return NextResponse.json({ error: e.message }, { status: e.status })
-  console.error(e)
-  return NextResponse.json({ error: "Internal error" }, { status: 500 })
+export function handleError(error: any) {
+  console.error("API Error:", error);
+  const message = error instanceof Error ? error.message : "Terjadi kesalahan pada server";
+  return NextResponse.json({ error: message }, { status: 500 });
 }

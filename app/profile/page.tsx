@@ -1,13 +1,33 @@
-import ProfileForm from "@/components/profile-form";
+import { requireUser } from "@/lib/auth/require-user"
+import { createClient } from "@/lib/supabase/server"
+import { PageTitle } from "@/components/ui/page-title"
+import { ProfileForm, type ProfileValues } from "@/components/profile/profile-form"
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const user = await requireUser()
+  const supabase = await createClient()
+
+  const { data: p, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle()
+  if (error) throw new Error(error.message)
+
+  const str = (x: unknown) => (x === null || x === undefined ? "" : String(x))
+
+  const initial: ProfileValues = {
+    full_name: str(p?.full_name),
+    university: str(p?.university),
+    study_program: str(p?.study_program),
+    semester: str(p?.semester),
+    gpa: str(p?.gpa),
+    monthly_household_income: str(p?.monthly_household_income),
+    household_size: str(p?.household_size),
+    first_generation: Boolean(p?.first_generation),
+    orphan_status: Boolean(p?.orphan_status),
+  }
+
   return (
-    <div className="flex-1 w-full flex flex-col gap-6 p-8 items-center">
-      <h1 className="text-2xl font-bold">Lengkapi Profil</h1>
-      <p className="text-muted-foreground text-center max-w-lg">
-        Isi informasi di bawah agar sistem dapat mencocokkan kamu dengan beasiswa yang tepat.
-      </p>
-      <ProfileForm />
-    </div>
-  );
+    <>
+      <PageTitle title="Profil" subtitle="Data ini dipakai untuk mencocokkan kamu dengan beasiswa. Hanya kamu yang bisa melihatnya." />
+      <ProfileForm userId={user.id} initial={initial} />
+    </>
+  )
 }
