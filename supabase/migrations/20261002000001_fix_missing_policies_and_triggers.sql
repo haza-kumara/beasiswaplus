@@ -147,6 +147,9 @@ FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 --      untuk SELECT/UPDATE/DELETE, bukan INSERT)
 -- ============================================================
 DROP POLICY IF EXISTS "Users can manage their chat messages" ON public.chat_messages;
+DROP POLICY IF EXISTS "Users can view their chat messages" ON public.chat_messages;
+DROP POLICY IF EXISTS "Users can insert their chat messages" ON public.chat_messages;
+DROP POLICY IF EXISTS "Users can delete their chat messages" ON public.chat_messages;
 
 CREATE POLICY "Users can view their chat messages"
 ON public.chat_messages FOR SELECT
@@ -191,74 +194,56 @@ FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 -- ============================================================
 -- 10. SEED: Contoh data beasiswa untuk development
 -- ============================================================
+-- Actual schema: id, title, provider, description, application_url, min_gpa, max_income, deadline, is_active
 INSERT INTO public.scholarships (
-  title, slug, provider_name, description, benefits,
-  funding_type, min_gpa, max_household_income,
-  target_first_gen_priority, target_orphan_priority,
-  required_docs, deadline, is_active
+  title, provider, description, min_gpa, max_income, deadline, is_active
 ) VALUES
 (
   'Beasiswa Bidikmisi KIP-K',
-  'bidikmisi-kip-k',
   'Kemdikbud RI',
-  'Beasiswa pemerintah untuk mahasiswa dari keluarga kurang mampu yang berprestasi.',
-  'Biaya kuliah full + biaya hidup Rp 700.000/bulan',
-  'full', 3.00, 4000000,
-  true, false,
-  ARRAY['KTM', 'KK', 'SKTM', 'Transkrip', 'Rekening Listrik'],
+  'Beasiswa pemerintah untuk mahasiswa dari keluarga kurang mampu yang berprestasi. Biaya kuliah full + biaya hidup Rp 700.000/bulan',
+  3.00, 4000000,
   '2027-03-31T23:59:59Z', true
 ),
 (
   'Beasiswa Yayasan Pendidikan Nusantara',
-  'ypn-2026',
   'Yayasan Pendidikan Nusantara',
-  'Beasiswa untuk mahasiswa yatim/piatu berprestasi di seluruh Indonesia.',
-  'Biaya kuliah s.d. Rp 12.000.000/semester',
-  'partial', 2.75, 6000000,
-  false, true,
-  ARRAY['KTM', 'Akte Kematian Orang Tua', 'Transkrip', 'SKTM'],
+  'Beasiswa untuk mahasiswa yatim/piatu berprestasi di seluruh Indonesia. Biaya kuliah s.d. Rp 12.000.000/semester',
+  2.75, 6000000,
   '2027-01-31T23:59:59Z', true
 ),
 (
   'Beasiswa First Generation Scholarship',
-  'first-gen-2026',
   'BeasiswaPlus Foundation',
-  'Khusus untuk generasi pertama dalam keluarga yang berhasil mengenyam pendidikan tinggi.',
-  'Biaya kuliah Rp 8.000.000/semester + mentoring',
-  'partial', 3.20, 5000000,
-  true, false,
-  ARRAY['KTM', 'KK', 'SKTM', 'Surat Pernyataan First Generation'],
+  'Khusus untuk generasi pertama dalam keluarga yang berhasil mengenyam pendidikan tinggi. Biaya kuliah Rp 8.000.000/semester + mentoring',
+  3.20, 5000000,
   '2026-12-31T23:59:59Z', true
 )
-ON CONFLICT (slug) DO NOTHING;
+RETURNING id;
 
-
--- Tambahkan requirements untuk setiap beasiswa
+-- Seed requirements (match by title since no slug column)
 -- Bidikmisi
 INSERT INTO public.scholarship_requirements (scholarship_id, requirement_type, operator, value, is_required)
-SELECT id, 'gpa',                      '>=', '3.00',    true  FROM public.scholarships WHERE slug = 'bidikmisi-kip-k'
+SELECT id, 'gpa',                      '>=', '3.00',    true  FROM public.scholarships WHERE title = 'Beasiswa Bidikmisi KIP-K'
 UNION ALL
-SELECT id, 'monthly_household_income', '<=', '4000000', true  FROM public.scholarships WHERE slug = 'bidikmisi-kip-k'
+SELECT id, 'monthly_household_income', '<=', '4000000', true  FROM public.scholarships WHERE title = 'Beasiswa Bidikmisi KIP-K'
 UNION ALL
-SELECT id, 'semester',                 '>=', '1',       true  FROM public.scholarships WHERE slug = 'bidikmisi-kip-k'
+SELECT id, 'semester',                 '>=', '1',       true  FROM public.scholarships WHERE title = 'Beasiswa Bidikmisi KIP-K'
 UNION ALL
-SELECT id, 'document',                 '=',  'SKTM',    true  FROM public.scholarships WHERE slug = 'bidikmisi-kip-k'
-ON CONFLICT DO NOTHING;
+SELECT id, 'document',                 '=',  'SKTM',    true  FROM public.scholarships WHERE title = 'Beasiswa Bidikmisi KIP-K';
 
--- YPN (Yayasan Pendidikan Nusantara)
+-- YPN
 INSERT INTO public.scholarship_requirements (scholarship_id, requirement_type, operator, value, is_required)
-SELECT id, 'gpa',          '>=', '2.75',        true  FROM public.scholarships WHERE slug = 'ypn-2026'
+SELECT id, 'gpa',                      '>=', '2.75',    true  FROM public.scholarships WHERE title = 'Beasiswa Yayasan Pendidikan Nusantara'
 UNION ALL
-SELECT id, 'orphan_status','!=', 'none',         true  FROM public.scholarships WHERE slug = 'ypn-2026'
+SELECT id, 'orphan_status',            '=',  'true',    true  FROM public.scholarships WHERE title = 'Beasiswa Yayasan Pendidikan Nusantara'
 UNION ALL
-SELECT id, 'monthly_household_income', '<=', '6000000', false FROM public.scholarships WHERE slug = 'ypn-2026'
-ON CONFLICT DO NOTHING;
+SELECT id, 'monthly_household_income', '<=', '6000000', false FROM public.scholarships WHERE title = 'Beasiswa Yayasan Pendidikan Nusantara';
 
 -- First Generation
 INSERT INTO public.scholarship_requirements (scholarship_id, requirement_type, operator, value, is_required)
-SELECT id, 'gpa',                      '>=', '3.20',    true  FROM public.scholarships WHERE slug = 'first-gen-2026'
+SELECT id, 'gpa',                      '>=', '3.20',    true  FROM public.scholarships WHERE title = 'Beasiswa First Generation Scholarship'
 UNION ALL
-SELECT id, 'is_first_generation',      '=',  'true',    true  FROM public.scholarships WHERE slug = 'first-gen-2026'
+SELECT id, 'first_generation',         '=',  'true',    true  FROM public.scholarships WHERE title = 'Beasiswa First Generation Scholarship'
 UNION ALL
-SELECT id, 'monthly_household_income', '<=', '5000000', true  FROM public.scholarships WHERE slug = 'first-gen-2026'
-ON CONFLICT DO NOTHING;
+SELECT id, 'monthly_household_income', '<=', '5000000', true  FROM public.scholarships WHERE title = 'Beasiswa First Generation Scholarship';
