@@ -23,8 +23,8 @@ export async function getMatchesForUser(): Promise<ScholarshipMatch[]> {
     .eq("is_active", true)
   if (error) throw new ServiceError(500, error.message)
 
-  // Tabel document_vault — anggap kosong kalau error
-  const docs = await supabase.from("document_vault").select("document_type").eq("user_id", user.id)
+  // Tabel documents — anggap kosong kalau error
+  const docs = await supabase.from("documents").select("document_type").eq("user_id", user.id)
   const owned = docs.error ? [] : (docs.data ?? []).map(d => d.document_type as string)
 
   const matches: ScholarshipMatch[] = []
